@@ -1,5 +1,7 @@
 export default async (event) => {
-  const connection = await fetch('/.netlify/functions/connectDB');
+  const connection = await fetch('/.netlify/functions/connectDB').then((res) =>
+    console.log(res)
+  );
   await connection.connect();
 
   console.log(connection);
