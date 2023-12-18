@@ -11,9 +11,12 @@ export default () => {
       database: 'imdb',
     });
     // Return the credentials
-    return new Response(JSON.stringify({ connection }), {
-      status: 200,
-    });
+    return (
+      new Response(connection),
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     console.error(error);
 
