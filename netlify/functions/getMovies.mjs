@@ -2,9 +2,9 @@ export default async (event) => {
   const connection = await fetch(
     'https://peppy-tapioca-c09f82.netlify.app/.netlify/functions/connectDB'
   )
-    .then((res) => res.json)
+    .then((res) => res.json())
     .then((data) => {
-      console.log('connection: ', data);
+      console.log('connection: ', data.connection);
       return data.connection;
     });
   await connection.connect();
