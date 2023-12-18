@@ -3,7 +3,7 @@ export default async (event) => {
     'https://peppy-tapioca-c09f82.netlify.app/.netlify/functions/connectDB'
   )
     .then((res) => res.json)
-    .then((res) => console.log(res));
+    .then((data) => console.log('connection: ', data));
   await connection.connect();
 
   console.log(connection);
