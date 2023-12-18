@@ -1,8 +1,7 @@
-import connection from './connectDB';
+export default async (event) => {
+  const connection = await fetch('/.netlify/functions/connectDB');
 
-export const getMovies = async (event) => {
   const { yearInput } = event.queryStringParameters;
-  console.log(`API Called with ${yearInput}`);
 
   await connection.query(
     'CALL GetTopTenMoviesAndCastByYear(?);',
@@ -13,4 +12,9 @@ export const getMovies = async (event) => {
       console.log(fields);
     }
   );
+  return console.log(`API Called with ${yearInput}`);
+};
+
+export const config = {
+  path: '/get-movies/:yearInput',
 };

@@ -7,14 +7,15 @@ function App() {
     setYear(e.target.value);
   };
 
-  const onSubmit = () => {
-    //query SQL
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    window.location.href = `./getMovies/?yearInput=${year}`;
+  };
 
   return (
     <>
       <h1>{`Hello World, it's the year ${year}`}</h1>
-      <form>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <label htmlFor="yearInput">Enter a year</label>
         <input
           type="number"
