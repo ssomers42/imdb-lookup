@@ -1,16 +1,18 @@
+import mysql from 'mysql';
+
 export default async (event) => {
-  const connection = await fetch(
+  const dbCredentials = await fetch(
     'https://peppy-tapioca-c09f82.netlify.app/.netlify/functions/connectDB'
   )
     .then((res) => res.json())
     .then((data) => {
       console.log('data: ', data);
-      console.log('connection: ', data.connection);
-      return data.connection;
+      console.log('dbCredentials: ', data.dbCredentials);
+      return data.dbCredentials;
     });
-  await connection.connect();
 
-  console.log(connection);
+  const connection = mysql.createConnection(dbCredentials);
+  await connection.connect();
 
   const { yearInput } = event.queryStringParameters;
   console.log(`API Called with ${yearInput}`);

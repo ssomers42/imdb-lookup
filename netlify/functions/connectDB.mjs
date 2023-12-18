@@ -1,18 +1,17 @@
-import mysql from 'mysql';
 import dotenv from 'dotenv';
 dotenv.config();
 
 export default async () => {
   try {
-    const connection = mysql.createConnection({
+    const dbCredentials = {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: 'imdb',
-    });
+    };
     // Return the credentials
     return new Response(
-      { connection },
+      { dbCredentials },
       {
         status: 200,
       }
