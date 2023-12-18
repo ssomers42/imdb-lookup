@@ -11,17 +11,15 @@ export default () => {
       database: 'imdb',
     });
     // Return the credentials
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ connection }),
-    };
+    return Response(JSON.stringify({ connection }), {
+      status: 200,
+    });
   } catch (error) {
     console.error(error);
 
     // Return an error response
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Internal Server Error' }),
-    }; // Return the credentials
+    return Response(JSON.stringify({ error: 'Internal Server Error' }), {
+      status: 500,
+    }); // Return the credentials
   }
 };
