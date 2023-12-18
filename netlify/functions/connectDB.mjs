@@ -10,8 +10,5 @@ export default async () => {
     password: process.env.DB_PASSWORD,
     database: 'imdb',
   });
-
-  await connection.connect();
-
   return new Response(connection);
 };
