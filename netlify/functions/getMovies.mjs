@@ -4,7 +4,7 @@ export default async (event) => {
   )
     .then((res) => res.json)
     .then((data) => {
-      console.log('connection: ', data.connection);
+      console.log('connection: ', data);
       return data.connection;
     });
   await connection.connect();
