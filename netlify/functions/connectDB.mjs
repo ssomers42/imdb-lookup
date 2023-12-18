@@ -18,7 +18,7 @@ export default () => {
     console.error(error);
 
     // Return an error response
-    return Response(JSON.stringify({ error: 'Internal Server Error' }), {
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
     }); // Return the credentials
   }
