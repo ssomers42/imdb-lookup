@@ -2,7 +2,7 @@ import mysql from 'mysql';
 import dotenv from 'dotenv';
 dotenv.config();
 
-export default () => {
+export default async () => {
   // connect to db
   const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -11,7 +11,7 @@ export default () => {
     database: 'imdb',
   });
 
-  connection.connect();
+  await connection.connect();
 
-  return connection;
+  return new Response(connection);
 };

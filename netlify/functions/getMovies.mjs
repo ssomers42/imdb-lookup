@@ -1,6 +1,8 @@
 export default async (event) => {
   const connection = await fetch('/.netlify/functions/connectDB');
 
+  console.log(connection);
+
   const { yearInput } = event.queryStringParameters;
 
   await connection.query(
