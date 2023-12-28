@@ -9,13 +9,15 @@ export default async () => {
       password: process.env.DB_PASSWORD,
       database: 'imdb',
     };
-    // Return the credentials
-    return new Response(
+    console.log(dbCredentials);
+    const returnThis = new Response(
       { dbCredentials },
       {
         status: 200,
       }
     );
+    // Return the credentials
+    return returnThis;
   } catch (error) {
     console.error(error);
 

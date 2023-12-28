@@ -9,7 +9,7 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    window.location.href = `./getMovies/?yearInput=${year}`;
+    window.location.href = `./get-movies/?yearInput=${year}`;
   };
 
   return (
