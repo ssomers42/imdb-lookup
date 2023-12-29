@@ -1,34 +1,46 @@
 import mysql from 'mysql';
 
-export default async (event) => {
-  const dbCredentials = await fetch(
-    'https://peppy-tapioca-c09f82.netlify.app/.netlify/functions/connectDB'
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      console.log('data: ', data);
-      console.log('dbCredentials: ', data.dbCredentials);
-      return data.dbCredentials;
-    });
+export default async (req, context) => {
+  const { inputYear } = context.params;
+  console.log(`getMovies Called with ${inputYear}`);
+  const connection = await connectToDB();
+  // Wrap the query in a promise
+  const query = await new Promise((resolve, reject) => {
+    connection.query(
+      'CALL GetTopTenMoviesByYear(?);',
+      [inputYear],
+      (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          console.log(rows);
+          resolve(rows);
+        }
+      }
+    );
+  });
+  connection.end();
+  console.log(query);
+  return new Response(JSON.stringify(query));
+};
 
+const fetchDBCredentials = async () => {
+  const dbCredentialsResponse = await fetch(
+    'http://localhost:8888/.netlify/functions/connectDB'
+  );
+  const dbCredentials = await dbCredentialsResponse.json();
+  console.log('fetched dbCredentials: ', dbCredentials);
+  return dbCredentials;
+};
+
+const connectToDB = async () => {
+  const dbCredentials = await fetchDBCredentials();
   const connection = mysql.createConnection(dbCredentials);
   await connection.connect();
-
-  const { yearInput } = event.queryStringParameters;
-  console.log(`API Called with ${yearInput}`);
-
-  await connection.query(
-    'CALL GetTopTenMoviesAndCastByYear(?);',
-    [yearInput],
-    (err, rows, fields) => {
-      if (err) throw err;
-      console.log(rows);
-      console.log(fields);
-    }
-  );
-  connection.end();
+  console.log('connected to DB');
+  return connection;
 };
 
 export const config = {
-  path: '/get-movies/:yearInput',
+  path: '/get-movies/:inputYear',
 };

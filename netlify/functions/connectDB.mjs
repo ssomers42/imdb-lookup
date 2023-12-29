@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-export default async () => {
+export default (req, context) => {
   try {
     const dbCredentials = {
       host: process.env.DB_HOST,
@@ -9,17 +9,12 @@ export default async () => {
       password: process.env.DB_PASSWORD,
       database: 'imdb',
     };
-    console.log(dbCredentials);
-    const returnThis = new Response(
-      { dbCredentials },
-      {
-        status: 200,
-      }
-    );
-    // Return the credentials
-    return returnThis;
+    return new Response(JSON.stringify(dbCredentials), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 200,
+    });
   } catch (error) {
-    console.error(error);
+    console.error('whoops', error);
 
     // Return an error response
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
