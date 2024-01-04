@@ -29,7 +29,7 @@ const fetchDBCredentials = async () => {
     'http://localhost:8888/.netlify/functions/connectDB'
   );
   const dbCredentials = await dbCredentialsResponse.json();
-  console.log('fetched dbCredentials: ', dbCredentials);
+  // console.log('fetched dbCredentials: ', dbCredentials);
   return dbCredentials;
 };
 
