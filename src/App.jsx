@@ -7,19 +7,18 @@ function App() {
 
   //TODO: Create separate movie card component
   let moviesList;
+  const baseURL = 'https://image.tmdb.org/t/p/';
+  const imageSize = 'w185';
   if (movies) {
     moviesList = movies.map((movie) => (
       <li key={movie.primaryTitle}>
-        movie: {movie.primaryTitle}, votes: {movie.numVotes}
-        <img src="" alt="" />
+        movie: {movie.primaryTitle}, rating: {movie.averageRating}
+        <img src={baseURL + imageSize + movie.poster_path} alt="" />
       </li>
     ));
   }
 
-  //TODO:  Iterate through movies and make API call for each
-
-  useEffect(() => {}, [movies]);
-
+  //Set year on submit to trigger getMovies()
   const handleSubmit = (e) => {
     e.preventDefault();
     setYear(inputRef.current.value);
@@ -28,18 +27,27 @@ function App() {
   useEffect(() => {
     const getMovies = async () => {
       try {
+        //Get top ten movies from DB for year input
         const resp = await fetch(`/get-movies/${year}`);
         const moviesData = await resp.json();
         const movies = moviesData[0];
-        console.log('movies', movies);
+
+        //Get poster URLs from TMDB
         const moviePosterPaths = await getMoviePosterPaths(movies);
-        console.log('paths', moviePosterPaths);
-        //TODO: add poster path to each movie
+
+        //Append poster URLs to top ten movies data and return new object
+        const moviesWithPaths = movies.map((movie, index) => {
+          return { ...movie, poster_path: moviePosterPaths[index] };
+        });
+
+        console.log('movies', moviesWithPaths);
+        setMovies(moviesWithPaths);
       } catch (err) {
         console.log('Error fetching movies', err);
       }
     };
 
+    //Fetch options for TMDB API call
     const options = {
       method: 'GET',
       headers: {
@@ -48,26 +56,29 @@ function App() {
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYzRlNDNmNjcwMzM0MTUxNjQwZGEzMzAwNDg0ZThlYSIsInN1YiI6IjY1OTYzYjI5MzI2ZWMxMzQ2ZDA2YzE4OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vXxgnVpjGjyhy7MfdQAfJ5gwjDuInrocMCFPVgDSUtU',
       },
     };
-    //Fetch TMDB movie poster URL paths using IMDB ID
+
+    //Fetch TMDB movie poster URL paths for each movie using IMDB ID
     const getMoviePosterPaths = async (movies) => {
       return Promise.all(
         movies.map(async (movie) => {
-          const resp = await fetch(
-            `https://api.themoviedb.org/3/find/${movie.tconst}?external_source=imdb_id`,
-            options
-          );
-          const movieDetails = await resp.json();
-          const moviePosterPath = movieDetails.movie_results[0].poster_path;
-          return moviePosterPath;
+          try {
+            const resp = await fetch(
+              `https://api.themoviedb.org/3/find/${movie.tconst}?external_source=imdb_id`,
+              options
+            );
+            const movieDetails = await resp.json();
+            const moviePosterPath = movieDetails.movie_results[0].poster_path;
+            return moviePosterPath;
+          } catch (err) {
+            console.log(err);
+          }
         })
       );
     };
 
-    //get movies and related posters then store in state
+    //Get movies and related posters then store in state
     if (year != undefined) {
-      const movies = getMovies();
-      console.log('movies', movies);
-      // setMovies();
+      getMovies();
     } else console.log('year undefined');
   }, [year]);
 
