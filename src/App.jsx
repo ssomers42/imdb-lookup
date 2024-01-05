@@ -14,6 +14,7 @@ function App() {
   };
 
   useEffect(() => {
+    //TODO: Move to own file
     const getMovies = async () => {
       try {
         //Get top ten movies from DB for year input
@@ -29,7 +30,6 @@ function App() {
           return { ...movie, poster_path: moviePosterPaths[index] };
         });
 
-        console.log('movies', moviesWithPaths);
         setMovies(moviesWithPaths);
       } catch (err) {
         console.log('Error fetching movies', err);
@@ -37,16 +37,18 @@ function App() {
     };
 
     //Fetch options for TMDB API call
+    //Leaving API key in .env rather than server call for speed and simplicity
+    //TODO: come back to optimize
     const options = {
       method: 'GET',
       headers: {
         accept: 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYzRlNDNmNjcwMzM0MTUxNjQwZGEzMzAwNDg0ZThlYSIsInN1YiI6IjY1OTYzYjI5MzI2ZWMxMzQ2ZDA2YzE4OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vXxgnVpjGjyhy7MfdQAfJ5gwjDuInrocMCFPVgDSUtU',
+        Authorization: `Bearer ${import.meta.env.TMDB_API_KEY}`,
       },
     };
 
     //Fetch TMDB movie poster URL paths for each movie using IMDB ID
+    //TODO: Move to own file along with options
     const getMoviePosterPaths = async (movies) => {
       return Promise.all(
         movies.map(async (movie) => {
