@@ -1,22 +1,11 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from 'react';
+import { MovieList } from './MovieList';
 
 function App() {
   const [year, setYear] = useState();
   const [movies, setMovies] = useState();
   const inputRef = useRef();
-
-  //TODO: Create separate movie card component
-  let moviesList;
-  const baseURL = 'https://image.tmdb.org/t/p/';
-  const imageSize = 'w185';
-  if (movies) {
-    moviesList = movies.map((movie) => (
-      <li key={movie.primaryTitle}>
-        movie: {movie.primaryTitle}, rating: {movie.averageRating}
-        <img src={baseURL + imageSize + movie.poster_path} alt="" />
-      </li>
-    ));
-  }
 
   //Set year on submit to trigger getMovies()
   const handleSubmit = (e) => {
@@ -97,7 +86,7 @@ function App() {
         />
         <button type="submit">SEARCH</button>
       </form>
-      {movies && <ul>{moviesList}</ul>}
+      {movies && <MovieList movies={movies} />}
     </>
   );
 }
