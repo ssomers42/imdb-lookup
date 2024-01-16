@@ -39,7 +39,9 @@ function App() {
     //Fetch TMDB movie poster URL paths for each movie using IMDB ID
     const getMoviePosterPaths = async (movies) => {
       const moviesQuery = encodeURIComponent(JSON.stringify(movies));
-      const getPathsURL = `/.netlify/functions/getMoviePosterPaths?movies=${moviesQuery}`;
+      //TODO: Swap test back to dyanmic URL
+      // const getPathsURL = `/.netlify/functions/getMoviePosterPaths?movies=${moviesQuery}`;
+      const getPathsURL = `/.netlify/functions/getMoviePosterPaths?movies=1`;
 
       try {
         console.log('getting paths');
