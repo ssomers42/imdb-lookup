@@ -1,8 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-export default (req, context) => {
+export default () => {
   try {
+    console.log('getting DB credentials');
     const dbCredentials = {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
