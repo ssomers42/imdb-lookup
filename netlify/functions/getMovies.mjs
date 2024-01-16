@@ -13,14 +13,12 @@ export default async (req, context) => {
         if (err) {
           reject(err);
         } else {
-          console.log(rows);
           resolve(rows);
         }
       }
     );
   });
   connection.end();
-  console.log(query);
   return new Response(JSON.stringify(query));
 };
 

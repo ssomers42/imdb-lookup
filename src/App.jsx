@@ -26,7 +26,7 @@ function App() {
         const moviePosterPaths = await getMoviePosterPaths(movies);
 
         //Append poster URLs to top ten movies data and return new object
-        const moviesWithPaths = movies.map((movie, index) => {
+        const moviesWithPaths = await movies.map((movie, index) => {
           return { ...movie, poster_path: moviePosterPaths[index] };
         });
 
@@ -36,35 +36,18 @@ function App() {
       }
     };
 
-    //Fetch options for TMDB API call
-    //Leaving API key in .env rather than server call for speed and simplicity
-    //TODO: come back to optimize
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${import.meta.env.TMDB_API_KEY}`,
-      },
-    };
-
     //Fetch TMDB movie poster URL paths for each movie using IMDB ID
-    //TODO: Move to own file along with options
     const getMoviePosterPaths = async (movies) => {
-      return Promise.all(
-        movies.map(async (movie) => {
-          try {
-            const resp = await fetch(
-              `https://api.themoviedb.org/3/find/${movie.tconst}?external_source=imdb_id`,
-              options
-            );
-            const movieDetails = await resp.json();
-            const moviePosterPath = movieDetails.movie_results[0].poster_path;
-            return moviePosterPath;
-          } catch (err) {
-            console.log(err);
-          }
-        })
-      );
+      const moviesQuery = encodeURIComponent(JSON.stringify(movies));
+      const getPathsURL = `http://localhost:8888/.netlify/functions/getMoviePosterPaths?movies=${moviesQuery}`;
+
+      try {
+        console.log('getting paths');
+        const resp = await fetch(getPathsURL);
+        return resp;
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     //Get movies and related posters then store in state
