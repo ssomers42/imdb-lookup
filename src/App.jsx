@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from 'react';
 import { MovieList } from './MovieList';
+import { getMovies } from './getMovies';
 
 function App() {
   const [year, setYear] = useState();
@@ -14,47 +15,13 @@ function App() {
   };
 
   useEffect(() => {
-    //TODO: Move to own file
-    const getMovies = async () => {
-      try {
-        //Get top ten movies from DB for year input
-        const resp = await fetch(`/get-movies/${year}`);
-        const moviesData = await resp.json();
-        const movies = moviesData[0];
-
-        //Get poster URLs from TMDB
-        const moviePosterPathsResp = await getMoviePosterPaths(movies);
-        const moviePosterPaths = await moviePosterPathsResp.json();
-        console.log(moviePosterPaths);
-
-        //Append poster URLs to top ten movies data and return new object
-        const moviesWithPaths = await movies.map((movie, index) => {
-          return { ...movie, poster_path: moviePosterPaths[index] };
-        });
-
-        setMovies(moviesWithPaths);
-      } catch (err) {
-        console.log('Error fetching movies', err);
-      }
+    const getMoviesAsync = async () => {
+      const movies = await getMovies(year);
+      setMovies(movies);
     };
-
-    //Fetch TMDB movie poster URL paths for each movie using IMDB ID
-    const getMoviePosterPaths = async (movies) => {
-      const moviesQuery = encodeURIComponent(JSON.stringify(movies));
-      const getPathsURL = `http://localhost:8888/.netlify/functions/getMoviePosterPaths?movies=${moviesQuery}`;
-
-      try {
-        console.log('getting paths');
-        const resp = await fetch(getPathsURL);
-        return resp;
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     //Get movies and related posters then store in state
     if (year != undefined) {
-      getMovies();
+      getMoviesAsync();
     } else console.log('year undefined');
   }, [year]);
 

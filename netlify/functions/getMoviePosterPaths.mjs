@@ -11,7 +11,7 @@ const options = {
 };
 
 //Fetch TMDB movie poster URL paths for each movie using IMDB ID
-export default async (event, context) => {
+export default async (event) => {
   console.log('fetching movie paths');
 
   //Split query params since event.queryStringParameters is broken??
@@ -19,7 +19,6 @@ export default async (event, context) => {
 
   //decode and parse movies object from params
   const movies = JSON.parse(decodeURIComponent(moviesQuery));
-  console.log(movies);
 
   //Fetch movie poster URL for each movie
   const moviePosterLinks = await Promise.all(
@@ -42,6 +41,6 @@ export default async (event, context) => {
 
   //Return the poster URLs for each movie
   return new Response(JSON.stringify(moviePosterLinks), {
-    status: 500,
+    status: 200,
   });
 };
