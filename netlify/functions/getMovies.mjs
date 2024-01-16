@@ -18,6 +18,7 @@ export default async (req, context) => {
       }
     );
   });
+  console.log('query finished:', query);
   connection.end();
   return new Response(JSON.stringify(query));
 };
