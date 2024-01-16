@@ -23,7 +23,9 @@ export default async (req, context) => {
 };
 
 const fetchDBCredentials = async () => {
-  const dbCredentialsResponse = await fetch('/.netlify/functions/connectDB');
+  const dbCredentialsResponse = await fetch(
+    'http://localhost:8888/.netlify/functions/connectDB'
+  );
   const dbCredentials = await dbCredentialsResponse.json();
   return dbCredentials;
 };

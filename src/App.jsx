@@ -23,7 +23,9 @@ function App() {
         const movies = moviesData[0];
 
         //Get poster URLs from TMDB
-        const moviePosterPaths = await getMoviePosterPaths(movies);
+        const moviePosterPathsResp = await getMoviePosterPaths(movies);
+        const moviePosterPaths = await moviePosterPathsResp.json();
+        console.log(moviePosterPaths);
 
         //Append poster URLs to top ten movies data and return new object
         const moviesWithPaths = await movies.map((movie, index) => {
@@ -39,9 +41,7 @@ function App() {
     //Fetch TMDB movie poster URL paths for each movie using IMDB ID
     const getMoviePosterPaths = async (movies) => {
       const moviesQuery = encodeURIComponent(JSON.stringify(movies));
-      //TODO: Swap test back to dyanmic URL
-      // const getPathsURL = `/.netlify/functions/getMoviePosterPaths?movies=${moviesQuery}`;
-      const getPathsURL = `/.netlify/functions/getMoviePosterPaths?movies=1`;
+      const getPathsURL = `http://localhost:8888/.netlify/functions/getMoviePosterPaths?movies=${moviesQuery}`;
 
       try {
         console.log('getting paths');
