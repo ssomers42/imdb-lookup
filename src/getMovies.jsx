@@ -3,7 +3,9 @@ import { getMoviePosterPaths } from './getMoviePosterPaths.jsx';
 export const getMovies = async (year) => {
   try {
     //Get top ten movies from DB for year input
-    const resp = await fetch(`/get-movies/${year}`);
+    const resp = await fetch(
+      `https://peppy-tapioca-c09f82.netlify.app/get-movies/${year}`
+    );
     const moviesData = await resp.json();
     const movies = moviesData[0];
 
