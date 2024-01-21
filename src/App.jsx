@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+// Auto-defining
+import 'ldrs/ring';
 import { useState, useEffect, useRef } from 'react';
 import { MovieList } from './MovieList';
 import { getMovies } from './getMovies';
@@ -8,6 +10,8 @@ function App() {
   const [year, setYear] = useState();
   const [genre, setGenre] = useState(null);
   const [movies, setMovies] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
   const yearRef = useRef(null);
   const genreRef = useRef(null);
 
@@ -20,13 +24,18 @@ function App() {
       : setGenre(genreRef.current.value);
   };
 
+  //Anytime year or genre are updated, fetch movies
+  //TODO: handle error state
   useEffect(() => {
     const getMoviesAsync = async () => {
+      setMovies(null);
       const movies = await getMovies(year, genre);
+      setIsLoading(false);
       setMovies(movies);
     };
     //Get movies and related posters then store in state
     if (year != undefined) {
+      setIsLoading(true);
       getMoviesAsync();
     } else console.log('year undefined');
   }, [year, genre]);
@@ -51,6 +60,11 @@ function App() {
         <SelectDropdown genreRef={genreRef} />
         <button type="submit">SEARCH</button>
       </form>
+      {isLoading && (
+        <div aria-live="polite" aria-busy={isLoading}>
+          {isLoading && <l-ring></l-ring>}
+        </div>
+      )}
       {movies && <MovieList movies={movies} />}
     </>
   );
