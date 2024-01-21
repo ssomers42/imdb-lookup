@@ -16,7 +16,6 @@ export default async (event) => {
 
   //Split query params since event.queryStringParameters is broken??
   const moviesQuery = event.url.split('=')[1];
-  console.log(moviesQuery);
 
   //decode and parse movies object from params
   const movies = JSON.parse(decodeURIComponent(moviesQuery));
@@ -44,4 +43,8 @@ export default async (event) => {
   return new Response(JSON.stringify(moviePosterLinks), {
     status: 200,
   });
+};
+
+export const config = {
+  path: '/get-movie-poster-paths',
 };

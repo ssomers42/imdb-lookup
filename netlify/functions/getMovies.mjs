@@ -1,14 +1,16 @@
 import mysql from 'mysql';
 
 export default async (req, context) => {
-  const { inputYear } = context.params;
-  console.log(`getMovies Called with ${inputYear}`);
+  const { year, genre } = context.params;
+
+  //TODO: Add genre to stored procedure and query
+  console.log(`getMovies Called with ${year}, ${genre}`);
   const connection = await connectToDB();
   // Wrap the query in a promise
   const query = await new Promise((resolve, reject) => {
     connection.query(
-      'CALL GetTopTenMoviesByYear(?);',
-      [inputYear],
+      'CALL GetTopTenMoviesByYearAndGenre(?, ?);',
+      [year, genre],
       (err, rows) => {
         if (err) {
           reject(err);
@@ -40,5 +42,5 @@ const connectToDB = async () => {
 };
 
 export const config = {
-  path: '/get-movies/:inputYear',
+  path: '/get-movies/:year/:genre',
 };
