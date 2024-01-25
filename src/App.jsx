@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 // Auto-defining
-import 'ldrs/ring';
+import { ring } from 'ldrs';
+ring.register('loading-spinner');
+
 import { useState, useEffect, useRef } from 'react';
 import { MovieList } from './MovieList';
 import { getMovies } from './getMovies';
@@ -62,7 +64,7 @@ function App() {
         <button type="submit">SEARCH</button>
       </form>
       <div aria-live="polite" aria-busy={isLoading}>
-        {isLoading && <l-ring></l-ring>}
+        {isLoading && <loading-spinner></loading-spinner>}
         {movies && <MovieList movies={movies} />}
       </div>
     </>
