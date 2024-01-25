@@ -35,6 +35,7 @@ function App() {
     };
     //Get movies and related posters then store in state
     if (year != undefined) {
+      console.log('loading');
       setIsLoading(true);
       getMoviesAsync();
     } else console.log('year undefined');
@@ -60,12 +61,10 @@ function App() {
         <SelectDropdown genreRef={genreRef} />
         <button type="submit">SEARCH</button>
       </form>
-      {isLoading && (
-        <div aria-live="polite" aria-busy={isLoading}>
-          {isLoading && <l-ring></l-ring>}
-        </div>
-      )}
-      {movies && <MovieList movies={movies} />}
+      <div aria-live="polite" aria-busy={isLoading}>
+        {isLoading && <l-ring></l-ring>}
+        {movies && <MovieList movies={movies} />}
+      </div>
     </>
   );
 }

@@ -3,6 +3,8 @@ import mysql from 'mysql';
 export default async (req, context) => {
   const { year } = context.params;
   let { genre } = context.params;
+
+  //If genre was null, convert back to null value instead of string received from params
   genre == 'null' ? (genre = null) : null;
 
   //TODO: Add genre to stored procedure and query
