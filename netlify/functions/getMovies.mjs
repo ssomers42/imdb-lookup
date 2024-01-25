@@ -1,7 +1,9 @@
 import mysql from 'mysql';
 
 export default async (req, context) => {
-  const { year, genre } = context.params;
+  const { year } = context.params;
+  let { genre } = context.params;
+  genre == 'null' ? (genre = null) : null;
 
   //TODO: Add genre to stored procedure and query
   console.log(`getMovies Called with ${year}, ${genre}`);
